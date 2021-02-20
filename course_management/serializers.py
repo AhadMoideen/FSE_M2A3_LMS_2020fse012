@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from user_management.serializers import UserSerializer
 from .models import Course, Module, EvaluationComponent
 
 
@@ -24,13 +24,14 @@ class CourseSerializer(serializers.ModelSerializer):
 class EvaluationComponentSerializer(serializers.ModelSerializer):
     class Meta:
         model = EvaluationComponent
-        fields = ['evaluationComponentId', 'marks', 'noOfQuestions', 'dateTime','type']
+        fields = ['evaluationComponentId', 'marks', 'noOfQuestions', 'dateTime', 'type']
 
 
 class CourseDetailSerializer(serializers.ModelSerializer):
     modules = ModuleSerializer(many=True, read_only=False)
     evaluationComponents = EvaluationComponentSerializer(many=True, read_only=False)
+    students = UserSerializer(many=True, read_only=False)
 
     class Meta:
         model = Course
-        fields = ['courseId', 'courseName', 'description', 'faculty', 'modules', 'evaluationComponents']
+        fields = ['courseId', 'courseName', 'description', 'faculty', 'modules', 'evaluationComponents', 'students']

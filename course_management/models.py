@@ -1,7 +1,5 @@
 from django.db import models
-
-
-# Create your models here.
+from user_management.models import User
 
 
 class Course(models.Model):
@@ -9,6 +7,7 @@ class Course(models.Model):
     courseName = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
     faculty = models.EmailField(max_length=100)
+    students = models.ManyToManyField(User)
 
 
 class Module(models.Model):
