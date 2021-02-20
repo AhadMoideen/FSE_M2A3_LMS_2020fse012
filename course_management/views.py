@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 
 from course_management.models import Course
 from course_management.serializers import CourseSerializer, CourseRegistrationSerializer, ModuleSerializer, \
-    CourseDetailSerializer
+    CourseDetailSerializer, EvaluationComponentSerializer
 
 
 class CourseAPIView(APIView):
@@ -44,6 +44,22 @@ class CourseUserAPIView(APIView):
 class CourseModuleAPIView(APIView):
     def post(self, request, courseId):
         serializer = ModuleSerializer(data=request.data)
+        print('Course:', courseId)
+        if serializer.is_valid():
+            try:
+                course = Course.objects.get(courseId=courseId)
+            except Course.DoesNotExist:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+            if serializer.is_valid():
+                serializer.validated_data.__setitem__('course', course)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class EvaluationComponentAPIView(APIView):
+    def post(self, request, courseId):
+        serializer = EvaluationComponentSerializer(data=request.data)
         print('Course:', courseId)
         if serializer.is_valid():
             try:
