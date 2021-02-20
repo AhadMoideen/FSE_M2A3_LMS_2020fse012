@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from course_management.models import Course
 from course_management.serializers import CourseSerializer, CourseRegistrationSerializer, ModuleSerializer, \
     CourseDetailSerializer, EvaluationComponentSerializer
+from user_management.models import User
 
 
 class CourseAPIView(APIView):
@@ -23,9 +24,10 @@ class CourseAPIView(APIView):
         print('Course-Register:')
         serializer = CourseRegistrationSerializer(data=request.data)
         if serializer.is_valid():
+            studentQuerySet = User.objects.filter(userType='STUDENT')
+            if studentQuerySet.exists():
+                serializer.validated_data.__setitem__('students', studentQuerySet)
             serializer.save()
-            # finalSerializer = CourseSerializer(data=serializer.data)
-            # if finalSerializer.is_valid():
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -10,10 +10,7 @@ from .serializers import RegistrationSerializer, LoginSerializer, UserSerializer
 @api_view(['GET', 'POST'])
 def register(request):
     if request.method == 'GET':
-        print('Login')
-        # articles = Article.objects.all()
-        # serializer = ArticleSerializer(articles, many=True)
-        # return Response(serializer.data)
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'POST':
         print('Registration')
         serializer = RegistrationSerializer(data=request.data)
@@ -31,10 +28,7 @@ def register(request):
 @api_view(['POST'])
 def login(request):
     if request.method == 'GET':
-        print('Login')
-        # articles = Article.objects.all()
-        # serializer = ArticleSerializer(articles, many=True)
-        # return Response(serializer.data)
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'POST':
         print('Login')
         serializer = LoginSerializer(data=request.data)
