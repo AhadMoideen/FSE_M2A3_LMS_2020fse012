@@ -72,7 +72,7 @@ DATABASES = {
         'NAME': 'fse',
         'USER': 'postgres',
         'PASSWORD': 'ahad',
-        'HOST': 'ec2-54-144-125-231.compute-1.amazonaws.com',
+        'HOST': 'ec2-3-88-214-192.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }
