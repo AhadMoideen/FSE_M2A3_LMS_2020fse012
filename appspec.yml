@@ -12,7 +12,7 @@ hooks:
   BeforeInstall:
     - location: /home/ec2-user/dependencies.sh
       timeout: 6000
-      runas: root
+      runas: ec2-user
   AfterInstall:
     - location: /home/ec2-user/migrate.sh
       timeout: 6000
