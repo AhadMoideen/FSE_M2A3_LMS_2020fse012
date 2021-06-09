@@ -1,3 +1,3 @@
 #!/bin/bash
+echo dependencies script BEGINS
 pwd
-pip3 install -r ./requirements.txt
