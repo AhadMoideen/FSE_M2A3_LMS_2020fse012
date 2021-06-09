@@ -5,11 +5,11 @@ files:
     destination: /root
 hooks:
   BeforeInstall:
-    - location: /root/dependencies.sh
+    - location: dependencies.sh
       runas: root
   AfterInstall:
-    - location: /root/migrate.sh
+    - location: migrate.sh
       runas: root
   ApplicationStart:
-    - location: /root/start.sh
+    - location: start.sh
       runas: root
