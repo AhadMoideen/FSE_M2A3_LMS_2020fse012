@@ -1,3 +1,3 @@
 #!/bin/bash
 pwd
-pip3 install -r /root/requirements.txt
+pip3 install -r ./requirements.txt
