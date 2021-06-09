@@ -19,13 +19,13 @@ class RegisterTestCases(TestCase):
             "userType": "FACULTY"
         }
 
-    def test_registerPositive(self):
+    def tes_registerPositive(self):
         response = self.client.post("/register/", self.payload)
         print("Status:")
         print(response.status_code)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_negativeName(self):
+    def tes_negativeName(self):
         response = self.client.post("/register/", self.payloadNegativeName)
         print("Status:")
         print(response.status_code)
