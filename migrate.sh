@@ -1,2 +1,2 @@
 #!/bin/bash
-python3 manage.py makemigrations && python3 manage.py migrate
+python3 /root/manage.py makemigrations && python3 /root/manage.py migrate
