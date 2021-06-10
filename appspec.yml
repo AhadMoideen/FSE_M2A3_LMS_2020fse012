@@ -1,0 +1,15 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /root
+hooks:
+  BeforeInstall:
+    - location: dependencies.sh
+      runas: root
+  AfterInstall:
+    - location: migrate.sh
+      runas: root
+  ApplicationStart:
+    - location: start.sh
+      runas: root
