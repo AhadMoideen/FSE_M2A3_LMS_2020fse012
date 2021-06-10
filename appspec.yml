@@ -5,10 +5,10 @@ files:
     destination: /root
 hooks:
   BeforeInstall:
-    - location: dependencies.sh
+    - location: pre-deployment.sh
       runas: root
   AfterInstall:
-    - location: migrate.sh
+    - location: dependencies.sh
       runas: root
   ApplicationStart:
     - location: start.sh
