@@ -25,7 +25,9 @@ INSTALLED_APPS = [
     'corsheaders'
 
 ]
-REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -72,7 +74,7 @@ DATABASES = {
         'NAME': 'fse',
         'USER': 'postgres',
         'PASSWORD': 'ahad',
-        'HOST': 'ec2-34-204-49-234.compute-1.amazonaws.com',
+        'HOST': '34.228.176.123',
         'PORT': '5432',
     }
 }
