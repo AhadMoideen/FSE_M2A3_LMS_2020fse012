@@ -1,0 +1,30 @@
+node {
+    parameters
+         {
+         string(name: 'Branch', defaultValue: 'feature/students', description: '(Branch Name)')
+         }
+    stage('Checkout code') { // for display purposes
+        bat 'echo Checkout'
+        checkout([$class: 'GitSCM', branches: [[name: "${params.Branch}"]], extensions: [], userRemoteConfigs: [[url: 'https://github.com/AhadMoideen/FSE_M2A3_LMS_2020fse012.git']]])
+    }
+    stage('Code Analysis') {
+        bat 'echo Analyis'
+        withSonarQubeEnv('SonarQube') {
+           bat 'sonar-scanner -Dsonar.projectKey=FSE-C3-DjangoApp'
+           sleep 5
+        }
+        withSonarQubeEnv('SonarQube') {
+           def qg = waitForQualityGate()
+           if (qg.status != 'OK') {
+               error "Pipeline aborted due to quality gate failure: ${qg.status}"
+            }
+        }    
+    }
+    stage('Deploy') {
+        bat '"C:\\Program Files\\Git\\usr\\bin\\dos2unix.exe" pre-deployment.sh'
+        bat '"C:\\Program Files\\Git\\usr\\bin\\dos2unix.exe" dependencies.sh'
+        bat '"C:\\Program Files\\Git\\usr\\bin\\dos2unix.exe" start.sh'
+       step([$class: 'AWSCodeDeployPublisher', applicationName: 'FSE-C5-A2', awsAccessKey: 'AKIA3ZDASEMKYJENME56', awsSecretKey: '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', credentials: 'awsAccessKey', deploymentGroupAppspec: false, deploymentGroupName: 'FSE-C5-A2-DG', deploymentMethod: 'deploy', iamRoleArn: 'arn:aws:iam::809803850517:role/Codedeploy-Access', includes: '**', proxyPort: 0, region: 'ap-south-1', s3bucket: 'fse-c5-a2-jenkins-cd', waitForCompletion: true])
+       // step([$class: 'AWSCodeDeployPublisher', applicationName: 'FSE-C5-A2', awsAccessKey: 'AKIA3ZDASEMKYJENME56', awsSecretKey: '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', credentials: 'awsAccessKey', deploymentGroupAppspec: false, deploymentGroupName: 'FSE-C5-A2-DG', deploymentMethod: 'deploy', excludes: '', iamRoleArn: '', includes: '**', proxyHost: '', proxyPort: 0, region: 'ap-south-1', s3bucket: '', s3prefix: '', subdirectory: '', versionFileName: '', waitForCompletion: false])
+    }
+}
