@@ -8,6 +8,7 @@ urlpatterns = [
     path('swagger-ui', schema_view),
     path('admin/', admin.site.urls),
     path('', include('user_management.urls')),
-    path('', include('course_management.urls'))
+    path('', include('course_management.urls')),
+    path('', include('notification_service.urls'))
 
 ]

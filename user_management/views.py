@@ -1,4 +1,5 @@
 # Create your views here.
+import requests
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -21,6 +22,11 @@ def register(request):
                 return Response(serializer.data)
             else:
                 serializer.save()
+                r = requests.post('http://localhost:8000/notification/user/'+ serializer.validated_data.get('userName'),
+                                  data={
+                                      'type': 'REGISTRATION',
+                                      'recipient': serializer.validated_data.get('userName')
+                                  }, params=request.POST)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

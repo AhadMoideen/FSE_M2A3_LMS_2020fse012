@@ -1,4 +1,5 @@
 # Create your views here.
+import requests
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -71,6 +72,20 @@ class EvaluationComponentAPIView(APIView):
             if serializer.is_valid():
                 serializer.validated_data.__setitem__('course', course)
             if serializer.is_valid():
+                self.email_students(request, CourseDetailSerializer(course).data, serializer.data)
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def email_students(self,request, courseDetail, evaluationDetail):
+        students = courseDetail['students']
+        recipients = []
+        for student in students:
+            recipients.append(student['userName'])
+        r = requests.post('http://localhost:8000/notification/course/' + str(courseDetail['courseId']) + '/e-val',
+                          json = {
+                              'courseName': str(courseDetail['courseName']),
+                              'type': 'NEW_EVAL',
+                              'recipients': recipients,
+                              'evaluationType': str(evaluationDetail['type'])
+                          }, params=request.POST)

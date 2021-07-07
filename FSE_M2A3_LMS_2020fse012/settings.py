@@ -22,7 +22,8 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'user_management',
     'course_management',
-    'corsheaders'
+    'corsheaders',
+    'notification_service'
 
 ]
 REST_FRAMEWORK = {
@@ -76,9 +77,18 @@ DATABASES = {
         'PASSWORD': 'ahad',
         'HOST': '34.228.176.123',
         'PORT': '5432',
+    },
+    'notification_db': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'fse',
+        'USER': 'ahad',
+        'PASSWORD': 'ahadmoideen',
+        'HOST': 'fse-mysql.cmu4fer0uvob.ap-south-1.rds.amazonaws.com',
+        'PORT': '3306',
     }
 }
 
+DATABASE_ROUTERS = [ 'notification_service.dbRouter.NotificationDBRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -117,3 +127,10 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'ahadmoideen@gmail.com'
+EMAIL_HOST_PASSWORD = 'leukrprqynshpszq'
