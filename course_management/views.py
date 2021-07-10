@@ -11,7 +11,6 @@ from user_management.models import User
 
 
 class CourseAPIView(APIView):
-
     def get(self, request, id):
         print('Course:Id:', id)
         try:
@@ -22,15 +21,28 @@ class CourseAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        print('Course-Register:')
         serializer = CourseRegistrationSerializer(data=request.data)
         if serializer.is_valid():
-            studentQuerySet = User.objects.filter(userType='STUDENT')
-            if studentQuerySet.exists():
-                serializer.validated_data.__setitem__('students', studentQuerySet)
+            student_query_set = User.objects.filter(userType='STUDENT')
+            if student_query_set.exists():
+                serializer.validated_data.__setitem__('students', student_query_set)
             serializer.save()
+            saved_course = Course.objects.get(courseId=serializer.data.get('courseId'))
+            self.email_students(request, CourseDetailSerializer(saved_course).data, "NEW_COURSE")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def email_students(self, request, courseDetail, emailType):
+        students = courseDetail['students']
+        recipients = []
+        for student in students:
+            recipients.append(student['userName'])
+        r = requests.post('http://localhost:8000/notification/course/' + str(courseDetail['courseId']),
+                          json={
+                              'courseName': str(courseDetail['courseName']),
+                              'type': emailType,
+                              'recipients': recipients
+                          }, params=request.POST)
 
 
 class CourseUserAPIView(APIView):
@@ -47,7 +59,6 @@ class CourseUserAPIView(APIView):
 class CourseModuleAPIView(APIView):
     def post(self, request, courseId):
         serializer = ModuleSerializer(data=request.data)
-        print('Course:', courseId)
         if serializer.is_valid():
             try:
                 course = Course.objects.get(courseId=courseId)
@@ -59,11 +70,11 @@ class CourseModuleAPIView(APIView):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class EvaluationComponentAPIView(APIView):
     def post(self, request, courseId):
         serializer = EvaluationComponentSerializer(data=request.data)
-        print('Course:', courseId)
         if serializer.is_valid():
             try:
                 course = Course.objects.get(courseId=courseId)
@@ -72,20 +83,20 @@ class EvaluationComponentAPIView(APIView):
             if serializer.is_valid():
                 serializer.validated_data.__setitem__('course', course)
             if serializer.is_valid():
-                self.email_students(request, CourseDetailSerializer(course).data, serializer.data)
                 serializer.save()
+                self.email_students(request, CourseDetailSerializer(course).data, serializer.data, "NEW_EVAL")
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def email_students(self,request, courseDetail, evaluationDetail):
+    def email_students(self, request, courseDetail, evaluationDetail, emailType):
         students = courseDetail['students']
         recipients = []
         for student in students:
             recipients.append(student['userName'])
         r = requests.post('http://localhost:8000/notification/course/' + str(courseDetail['courseId']) + '/e-val',
-                          json = {
+                          json={
                               'courseName': str(courseDetail['courseName']),
-                              'type': 'NEW_EVAL',
+                              'type': emailType,
                               'recipients': recipients,
                               'evaluationType': str(evaluationDetail['type'])
                           }, params=request.POST)

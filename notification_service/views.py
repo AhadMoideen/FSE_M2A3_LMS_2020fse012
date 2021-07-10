@@ -51,6 +51,6 @@ class CourseNotificationAPIView(APIView):
                     data={'recipient': recipient, 'type': 'NEW_COURSE', 'hasRead': False})
                 if notificationSerializer.is_valid():
                     notificationSerializer.save()
-            send_mail('FSE-LMS: New course:'+str(request.data['courseName']), 'New Course has been added: ' + str(request.data['courseName']),
+            send_mail('FSE-LMS: New course:'+str(request.data['courseName']), 'You have been added to: ' + str(request.data['courseName']),
                       'ahadmoideen@gmail.com', recipients)
         return Response({}, status=status.HTTP_201_CREATED)
