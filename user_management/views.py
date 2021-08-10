@@ -22,7 +22,7 @@ def register(request):
                 return Response(serializer.data)
             else:
                 serializer.save()
-                r = requests.post('http://localhost:8000/notification/user/'+ serializer.validated_data.get('userName'),
+                r = requests.post('http://localhost:7000/notification/user/'+ serializer.validated_data.get('userName'),
                                   data={
                                       'type': 'REGISTRATION',
                                       'recipient': serializer.validated_data.get('userName')

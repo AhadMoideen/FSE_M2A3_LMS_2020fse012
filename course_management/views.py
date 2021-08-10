@@ -37,7 +37,7 @@ class CourseAPIView(APIView):
         recipients = []
         for student in students:
             recipients.append(student['userName'])
-        r = requests.post('http://localhost:8000/notification/course/' + str(courseDetail['courseId']),
+        r = requests.post('http://localhost:7000/notification/course/' + str(courseDetail['courseId']),
                           json={
                               'courseName': str(courseDetail['courseName']),
                               'type': emailType,
@@ -93,7 +93,7 @@ class EvaluationComponentAPIView(APIView):
         recipients = []
         for student in students:
             recipients.append(student['userName'])
-        r = requests.post('http://localhost:8000/notification/course/' + str(courseDetail['courseId']) + '/e-val',
+        r = requests.post('http://localhost:7000/notification/course/' + str(courseDetail['courseId']) + '/e-val',
                           json={
                               'courseName': str(courseDetail['courseName']),
                               'type': emailType,
