@@ -10,4 +10,4 @@ RUN set -eux && \
 RUN pip3 install -r requirements.txt
 RUN python manage.py makemigrations && python manage.py migrate
 EXPOSE 8000
-CMD ["nohup", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["nohup", "python",0 "manage.py", "runserver", "8000"]
