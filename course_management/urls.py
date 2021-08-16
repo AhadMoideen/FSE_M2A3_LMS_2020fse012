@@ -8,6 +8,5 @@ urlpatterns = [
     path('course/user/<str:email>', CourseUserAPIView.as_view()),
     path('course/<str:courseId>/module', CourseModuleAPIView.as_view()),
     path('course/<str:courseId>/e-val', EvaluationComponentAPIView.as_view()),
-    path('course/user/<str:email>/test', CourseUserAPIView.as_view()),
-    
+    path('course/user/<str:email>/test', CourseUserAPIView.as_view())
 ]
